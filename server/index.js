@@ -23,6 +23,9 @@ var corsOptions = {
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
+/* Check if the user has taken a survey */
+
 app.get("/checkSurveyHeader", (req, res) => {
     
   const UserID = req.query.UserID;
@@ -43,6 +46,8 @@ app.get("/checkSurveyHeader", (req, res) => {
 });
 
 
+/* Add the survey log into the table */
+
 
 app.post("/addSurveyHeader", (req, res) => {
   
@@ -60,6 +65,9 @@ app.post("/addSurveyHeader", (req, res) => {
      });
 });
 
+
+/* Display the Survey Log  */
+
 app.get("/displaySurveyHeader", (req, res) => {
     
   db.conn.query( "SELECT  Surveys.SurveyTitle,Surveys.BucketType,Surveys.CategoryID,Users.EmailID, Users.UserType,Users.First_Name,Users.Last_Name ,UserSurveyHeader.Time_stamp FROM StartwellDB.UserSurveyHeader JOIN StartwellDB.Users ON UserSurveyHeader.UserID = Users.UserID JOIN StartwellDB.Surveys ON UserSurveyHeader.SurveyID = Surveys.SurveyID;",
@@ -76,6 +84,8 @@ app.get("/displaySurveyHeader", (req, res) => {
        }
      });
 });
+
+/* Addition of Questions with option to a survey in a single JSon */
 
 
 app.post("/addQuestionwithOptions",(req,res) => {
@@ -121,6 +131,7 @@ Promise.all(promise).then(() =>{
 })
 
 
+/* Addition of Questions with option to a survey one by one */
 
 app.post("/addSurveyQuesOpt",(req,res) =>
 {
@@ -151,6 +162,7 @@ app.post("/addSurveyQuesOpt",(req,res) =>
   
 
 
+/* Delete a Survey Question Along with options */
 
 app.delete("/deleteSurveyQuestion",(req,res) => {
 
@@ -174,6 +186,7 @@ app.delete("/deleteSurveyQuestion",(req,res) => {
 )
 })
 
+/* Dleete a Survey with all the questions , options */
 
 app.delete("/deleteWholeSurvey",(req,res) => {
 
@@ -195,7 +208,7 @@ app.delete("/deleteWholeSurvey",(req,res) => {
 )
 })
 
-
+/* Edit the survey Details */
 
 app.put("/EditSurveyDetails",(req,res) => {
 
@@ -222,6 +235,9 @@ app.put("/EditSurveyDetails",(req,res) => {
 
 })
 
+
+/* Display all the Survey under the User Bucket */
+
 app.get("/displayUserSurvey",function(req,res){
   
   db.conn.query("SELECT * FROM Surveys WHERE BucketType = 'Customer' OR 'All';", (err,result) => 
@@ -242,6 +258,8 @@ app.get("/displayUserSurvey",function(req,res){
     }
   })
 })
+
+/* Display all the Survey under the therapist bucket */
 
 app.get("/displayTherapistSurvey",function(req,res){
   
@@ -264,6 +282,8 @@ app.get("/displayTherapistSurvey",function(req,res){
   })
 })
 
+/* Display all the survey in the DB */
+
 app.get("/displayingAllSurveys",function(req,res){
   
   db.conn.query("SELECT * FROM Surveys;", (err,result) => 
@@ -284,6 +304,8 @@ app.get("/displayingAllSurveys",function(req,res){
     }
   })
 })
+
+/* When given a survey Id , display the details */
 
 
 app.get("/displaySurveyDetails",function(req,res){
@@ -313,6 +335,8 @@ app.get("/displaySurveyDetails",function(req,res){
   })
 })
 
+/* Add cross Reference into the table which decides the matching criteria */
+
 app.post("/addCrossReference", (req, res) => {
   
   const SurveyID_Customer = req.body.SurveyID_Customer;
@@ -338,7 +362,7 @@ app.post("/addCrossReference", (req, res) => {
      });
 });
 
-
+/* Display only the surveyID */
 
 app.get("/displaySurveyID",function(req,res){
 
@@ -361,6 +385,7 @@ app.get("/displaySurveyID",function(req,res){
   })
 })
 
+/* Display the Survey Title */
 
 app.get("/displaySurveyTitle",function(req,res){
 
@@ -383,7 +408,7 @@ app.get("/displaySurveyTitle",function(req,res){
   })
 })
 
-
+/* Display all the Categories from the DB */
 
 app.get("/displayCategoryID",function(req,res){
 
@@ -406,6 +431,7 @@ app.get("/displayCategoryID",function(req,res){
   })
 })
 
+/* Display all the distinct quesID */
 
 app.get("/displayQuesID",function(req,res){
 
@@ -428,6 +454,8 @@ app.get("/displayQuesID",function(req,res){
   })
 })
 
+/* Display all Response type of questions */
+
 app.get("/DisplayRespType",function(req,res){
 
 
@@ -449,7 +477,7 @@ app.get("/DisplayRespType",function(req,res){
   })
 })
 
-
+/* Display the CrossReference table */
 
 app.get("/displayCrossReference",function(req,res){
 
@@ -473,6 +501,8 @@ app.get("/displayCrossReference",function(req,res){
   })
 })
 
+/* Display all the questions in all the survey */
+
 app.get("/displaySQuestions",function(req,res){
 
   const SurveyID = req.query.SurveyID;
@@ -494,6 +524,8 @@ app.get("/displaySQuestions",function(req,res){
     }
   })
 })
+
+/* Display all Cateogey under a particular Bucket */
 
 app.get("/CateogryUnderEachBucket",function(req,res){
 
@@ -517,6 +549,8 @@ app.get("/CateogryUnderEachBucket",function(req,res){
   })
 })
 
+/* All the survey under each bucket */
+
 app.get("/SurveyUnderEachBucket",function(req,res){
 
   const BucketType = req.query.BucketType;
@@ -539,6 +573,9 @@ app.get("/SurveyUnderEachBucket",function(req,res){
   })
 })
 
+
+/* All the Survey under each cateogry */
+
 app.get("/SurveyUnderEachCateogry",function(req,res){
 
   const CategoryID = req.query.CategoryID;
@@ -560,6 +597,8 @@ app.get("/SurveyUnderEachCateogry",function(req,res){
     }
   })
 })
+
+/* Diplay all the user and therapist that are linked */
 
 app.get("/displayLinkedUser",function(req,res){
 
@@ -611,6 +650,9 @@ app.get("/displayLinkedUser",function(req,res){
   )
 })
 
+/* Display all the categories under all the buckets */
+
+
 app.get("/displaySCategories",function(req,res){
 
   db.conn.query("SELECT * FROM SCategories", (err,result) => 
@@ -643,6 +685,8 @@ app.get("/displaySCategories",function(req,res){
   })
 })
 
+/* Set the user status to active , inactive or blocked */
+
 app.put("/updateUserStatus",(req,res) => {
 
   const UserID = req.body.UserID;
@@ -665,6 +709,7 @@ app.put("/updateUserStatus",(req,res) => {
 
 })
 
+/* Change the conatctUs to resolved or unresolved */
 
 app.put("/EditContactUs",(req,res) => {
 
@@ -686,6 +731,8 @@ app.put("/EditContactUs",(req,res) => {
   })
 
 })
+/* Change the conatctUs to resolved or unresolved */
+
 
 app.put("/resolveContactUs",(req,res) => {
 
@@ -707,6 +754,8 @@ app.put("/resolveContactUs",(req,res) => {
   })
 
 })
+
+/* Display all the Contact Us   */
 
 app.get("/DisplayContactUs",function(req,res){
 
@@ -740,6 +789,8 @@ app.get("/DisplayContactUs",function(req,res){
   })
 })
 
+/* Used to block a particular User  */
+
 app.put("/blockUser",(req,res) => {
 
   const UserID = req.body.UserID;
@@ -760,6 +811,8 @@ app.put("/blockUser",(req,res) => {
   })
 
 })
+
+/* Gets all the user registerd in ths system  */
 
 app.get("/displayAllUsers",function(req,res){
 
@@ -797,6 +850,8 @@ app.get("/displayAllUsers",function(req,res){
   })
 })
 
+/*  Edit the options of a particular questions */
+
 app.put("/EditOption",(req,res) => {
 
   const OptID = req.body.OptID;
@@ -819,6 +874,9 @@ app.put("/EditOption",(req,res) => {
   })
 
 })
+
+
+/* Edit survey details of a particular survey  */
 
 app.put("/EditSurvey",(req,res) => {
 
@@ -843,6 +901,8 @@ app.put("/EditSurvey",(req,res) => {
 
 })
 
+/*  Edit the Question text and weights */
+
 app.put("/EditQues",(req,res) => {
 
   const QText = req.body.QText;
@@ -866,6 +926,8 @@ app.put("/EditQues",(req,res) => {
 
 })
 
+/* Delete a question from a survey  */
+
 app.delete("/deleteQues",(req,res) => {
 
   const SurveyID = req.body.SurveyID;
@@ -886,7 +948,7 @@ app.delete("/deleteQues",(req,res) => {
 )
 })
 
-
+/*  Once the User takes the survey , store the responses in the system  */
 
 app.post("/saveUserResponse",[authJWT.verifyToken],(req,res) => {
   console.log(req.body);
@@ -920,6 +982,7 @@ Promise.all(promise).then(() =>{
 
 })
 
+/* Post email who register for newsletter  */
 
 app.post("/newsletter", [authJWT.verifyToken],(req, res) => {
   console.log(req.body);
@@ -933,6 +996,7 @@ app.post("/newsletter", [authJWT.verifyToken],(req, res) => {
      });
 });
 
+/*  Display all the user bucket in the system  */
 
 app.get("/displayUserbucket",function(req,res){
 
@@ -956,6 +1020,8 @@ app.get("/displayUserbucket",function(req,res){
   })
 })
 
+/*  Add a new  Bucket  */
+
 app.post("/addBucket",(req,res) => 
     {
       const BucketType = req.body.BucketType;
@@ -972,6 +1038,8 @@ app.post("/addBucket",(req,res) =>
             }
          });
       });
+
+/* Add a new Category  */      
 
       app.post("/addSCategories", (req,res) => 
       {
@@ -992,6 +1060,8 @@ app.post("/addBucket",(req,res) =>
               }
            });
         });
+
+ /*  add a new survey   */       
 
       app.post("/addSurvey",(req,res) => 
       {
@@ -1017,6 +1087,9 @@ app.post("/addBucket",(req,res) =>
               
         )}
       );
+
+
+      /*  Add a new survey question */
            
         app.post("/addSurveyQuestion", (req,res) => 
       {
@@ -1038,7 +1111,7 @@ app.post("/addBucket",(req,res) =>
               }
            });
         });
-
+/* add options to a question  */
 
         app.post("/addQOptions",(req,res) => 
       {
@@ -1063,6 +1136,8 @@ app.post("/addBucket",(req,res) =>
            
         });
   
+/*  Login API  */
+
 
         app.post('/user/login', function(request, response) {
           console.log(request.body)
@@ -1163,6 +1238,7 @@ app.post("/addBucket",(req,res) =>
            })
         })
 
+/* Get details of the User when JWT is passed  */
 
  app.get("/profiledetails",[authJWT.verifyToken],(req, res) => {
 
@@ -1205,7 +1281,7 @@ app.post("/addBucket",(req,res) =>
         )
       });
       
-
+/* Delete a user from the system  */
 
   app.delete("/Userdelete",(req,res) => {
 
@@ -1247,6 +1323,8 @@ app.delete("/profiledelete", [authJWT.verifyToken],(req,res) => {
       )
     })
     
+/* Change Personal Details of the User  */
+
     app.put("/profileupdate" , [authJWT.verifyToken],(req,res) =>
     {
 
@@ -1277,7 +1355,9 @@ app.delete("/profiledelete", [authJWT.verifyToken],(req,res) => {
       })
     })
     
-    
+    /*  Write a contact us request */
+
+
     app.post("/contactUs", (req,res) => 
     {
       const email = req.body.email;
@@ -1295,7 +1375,9 @@ app.delete("/profiledelete", [authJWT.verifyToken],(req,res) => {
             }
          });
       });
-           
+
+
+           /* Display all the survey in a system   */
 
 app.get("/displayAllSurvey",function(req,res){
 
@@ -1328,6 +1410,7 @@ app.get("/displayAllSurvey",function(req,res){
           }
         })
       })
+/*  when survey Id is passed display question and options */
 
 	 app.get("/surveyQandOpt",function(req,res){
 
@@ -1379,6 +1462,8 @@ app.get("/displayAllSurvey",function(req,res){
         )
       })
 
+/* Display options for a question  */
+
  app.get("/surveyOptions", function(req,res){
 
         const SurveyID = req.query.SurveyID;
@@ -1402,6 +1487,7 @@ app.get("/displayAllSurvey",function(req,res){
 
       })
 
+/*  Forgot password */
 
 app.post('/user/forgotpassword',function(req, res){
     var data = {
@@ -1483,6 +1569,7 @@ app.post('/user/forgotpassword',function(req, res){
 
 })
 
+/*  Reset Password  */
 
 app.get('/user/resetpassword', cors(corsOptions),function(req,res){
     console.log("In re-setpassword",req.query)
@@ -1523,6 +1610,9 @@ app.get('/user/resetpassword', cors(corsOptions),function(req,res){
 
 })
 
+
+/* Update Password  */
+
 app.put('/user/updatepassword', function(req,res)
 {
     var data = {
@@ -1555,8 +1645,7 @@ app.put('/user/updatepassword', function(req,res)
 
 })
 
-
-
+/* Response pulled for Maching algorithm  */
 
 app.get('/user_response', function(request, response) {
   let scoreMap = new Map();
@@ -1698,8 +1787,7 @@ Promise.all(promise).then((values) =>{
 
 //End of promise 1
 });
-//}  // End of for 
-//console.log('Score Map: ', scoreMap)
+
 });
 });
 
@@ -1712,257 +1800,10 @@ Promise.all(promise).then((values) =>{
 
 
 
-// app.get('/user_response', function(request, response) {
-//   let scoreMap = new Map();
-//   let list1=[]
-//   let surveyidlist=[]
-//   console.log("body",request.body)
-//   console.log("query",request.query)
-//   var data = {
-//     "UserID" : request.query.UserID,
-    
-//   }
-  
-//   db.conn.query(`select distinct SurveyID from UserResponses where UserID = '${request.query.UserID}'`,
-//     function (error0, res0, fields) 
-//     {
 
-//       if (error0) {
-//         console.log("failed");
-//         return response.send(error0)
-//       } else {
-//         console.log("selecting distint survey ID",res0);
-//         surveyidlist=res0;
-        
-
-//       }
 
       
     
-//     console.log(data.UserID)
-//     for (var a=0; a<surveyidlist.length; a++){
-
-//     console.log(request.query.UserID, surveyidlist[a])
-// // check if user exists
-//     db.conn.query(`select * from UserResponses A
-//     join CrossReference B on A.SurveyID=B.SurveyID_Customer
-//     and A.QuesID=B.QuesID_Customer and A.OptID=B.OptID_Customer  
-//     where UserID = '${request.query.UserID}' and SurveyID_Customer = '${surveyidlist[a].SurveyID}'`, function(error, results, fields)
-//        {
-//          console.log("error",error)
-//           if(error)
-//           {	  console.log("failed");
-//               //response.send("Failed");
-          
-//            }
-//           else
-//           {
-//             list1=[];
-//             //console.log("outside")
-//             console.log(results.length)
-//             if (results.length > 0)
-//             {
-//              // console.log("inside")
-//               userResponses = results
-//              // response.send("user Success");
-//             // console.log(userResponses)
-//               for (var b=0; b<results.length; b++)
-//               {
-
-//                 var type = 'Provider';
-//                 //console.log("surveyid",results[b].SurveyID_Provider, "A.QuesID=",results[b].QuesID_Provider, "A.OptID=",results[b].OptID_Provider)
-
-//               db.conn.query(`select distinct UserID, Weights from UserResponses A join SQuestions B on A.SurveyID = B.SurveyID and A.QuesID = B.QuesID where UserType = '${type}' and A.SurveyID='${results[b].SurveyID_Provider}' and A.QuesID='${results[b].QuesID_Provider}' and A.OptID='${results[b].OptID_Provider}'`, function(error2, results2, fields2)
-//               {
-                
-//                 console.log("error2",error2)
-//                if(error2)
-//                 {
-//                   console.log("failed");
-//                   return response.send("failed");
-//                 }
-//                else
-//                {
-                
-//                  //console.log(results2)
-//                  //console.log(results2.length)
-//                  if (results2.length > 0)
-//                  {
-//                     //console.log("In the score map")
-                  
-//                       for (var c=0; c<results2.length; c++){
-//                         console.log("results2.length",results2[c].UserID)
-//                         console.log(scoreMap.has(results2[c].UserID))
-//                           if (scoreMap.has(results2[c].UserID))
-//                           {
-//                             //console.log("Inside if of map")
-//                             scoreMap.set(results2[c].UserID, scoreMap.get(results2[c].UserID) + results2[c].Weights)
-//                             //console.log('Score Map in inside: ', scoreMap)
-//                           }
-//                           else{
-//                           //console.log("Inside else of map")
-//                           scoreMap.set(results2[c].UserID , results2[c].Weights)
-//                           //console.log('Score Map in else: ', scoreMap)
-//                           }
-//                       }
-//                       console.log(' Printing Score Map in 1628: ', scoreMap)
-//                       //response.send(scoreMap);
-//                   }
-//                   console.log(' Printing Score Map in 1631: ', scoreMap)
-//                   scoreMap[Symbol.iterator] = function* () {
-//                       yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
-//                     }
-//                     list1=[]
-//                     for (let [key, value] of scoreMap) 
-//                     {
-//                       // console.log(list1.length)
-//                       if(list1.length<=4)
-//                       {
-//                         list1.push(key,value)
-//                       }
-                      
-//                     }
-                  
-//                     console.log('Final list',list1);
-
-//                 }  
-          
-//                // console.log("User response =",scoreMap)
-//                 //console.log(list1)
-//               });
-
-//               }
-              
-//             }
-//           }
-//           console.log('Score Map: ', scoreMap) 
-//   });
-
-// }
-// console.log('Score Map: ', scoreMap)
-// });
-// });
-
-///// 
-
-
-
-
-
-
-
-
-
-// var provider_response=[]
-
-// var compareValues =function(userResponses,providerResponses)
-// {
-// //datastructure to store every providers matching score with user
-// console.log("userResponses",userResponses)
-// console.log("Provider Response", providerResponses)
-// var match=0;
-// var first=[0, -1]; var second=[0, -1];
-// var third=[0, -1];
-// var score = 0; var provider = [];
-
-// var map = new Map();
-
-// for (var a=0; a<userResponses.length; a++){
-//   score = 0; 
-//   provider = [];
-  
-//   for (var i=0; i<providerResponses.length; i++){
-
-//     score = 0; 
-//       //console.log("PR:",providerResponses[i])
-//       if((userResponses[a].Response == "No-Preference" || providerResponses[i].Response=="No-Preference"))
-//       {
-//           score = providerResponses[i].Weights/2
-//           provider = [score, providerResponses[i].UserID,providerResponses[i].EmailID,providerResponses[i].First_Name]
-//       }
-//       else if (userResponses[a].Response == providerResponses[i].Response)
-//       {
-//         score = providerResponses[i].Weights
-//         provider = [score, providerResponses[i].UserID,providerResponses[i].EmailID,providerResponses[i].First_Name]
-        
-//         // console.log("userscore",userscore," prod score", prodscore)
-//         // if((userscore-5) <= prodscore <= (userscore+5) && Math.max(match))
-//         // {
-//         //   console.log(userResponses[a].EmailID,' : ',providerResponses[i].EmailID);
-//         // }
-//         //   //calculate score for every provider
-//          //console.log(provider[0],provider[1],provider[2],provider[3])
-//        } //var score =score+weight 
-//        if (map.has(providerResponses[i].EmailID)){
-//          //console.log("Score: ", score)
-//          //console.log("Total: ", map.get(providerResponses[i].EmailID))
-//          map.set(providerResponses[i].EmailID, map.get(providerResponses[i].EmailID) + score)
-//        }
-//        else{
-//         map.set(providerResponses[i].EmailID, score)
-//        }
-
-
-       
-  
-//     //console.log(provider[0])
-
-//   }
- 
-//   }
-//   console.log("mapppp",map)
-// //   for (let [key, value] of map){
-// //     if (value > first[1]){
-// //       third = second
-// //       second = first
-// //       first[0] = key
-// //       first[1] = value  
-// //       console.log("value >first[i",key,value)
-// //  }
-// //  if (value > second[1] && value < first[1])
-// //  {        
-// //   third = second
-// //   second[0] = key
-// //   second[1] = value
-// //   console.log("value >second[i",key,value)
-// //  }
-// //   if (value > third[1] && value < second[1]){
-        
-// //         third[0] = key
-// //         third[1] = value
-// //         console.log("last",key,value)
-// //     }
-// //   }
-// map[Symbol.iterator] = function* () {
-//   yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
-// }
-// var ctr=0;
-// for (let [key, value] of map) {     // get data sorted
-//  ctr=ctr+1;
-//  if(ctr==1)
-//  {
-//    first[0]=key
-//    first[1]=value
-//  }
-//  if(ctr==2)
-//  {
-//    second[0]=key
-//    second[1]=value
-//  }
-//  if(ctr==3)
-//  {
-//    third[0]=key
-//    third[1]=value
-//  }
-//  if(ctr==3)
-//  break;
-
-// }
-// console.log("we are avengers")
-// console.log([...map]); 
-//   return [first[0],first[1],second[0],second[1],third[0],third[1]]
-
-// }
 
 
 
